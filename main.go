@@ -19,6 +19,11 @@ func displayCoffee(w http.ResponseWriter, r *http.Request) {
 }
 
 func createCoffee(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.Header().Set("Allow", http.MethodPost)
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
 	w.Write([]byte("Create a new coffee"))
 }
 
