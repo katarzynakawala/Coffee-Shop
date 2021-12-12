@@ -1,0 +1,20 @@
+{{define "base"}}
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>{{template "title" .}} - Coffee Shop</title>
+    </head>
+    <body>
+        <header>
+            <h1><a href='/'>Coffee Shop</h1>
+        </header>
+        <nav>
+            <a href='/'>Home</a>
+        </nav>
+        <main>
+            {{template "main" .}}
+        </main>
+        {{template "footer" .}}    
+    </body>
+</html>    
+{{end}}
