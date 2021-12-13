@@ -11,6 +11,9 @@ func main() {
     mux.HandleFunc("/coffee", displayCoffee)
     mux.HandleFunc("/coffee/create", createCoffee)
 
+    fileServer := http.FileServer(http.Dir("./ui/static/"))
+    mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+
     log.Println("Starting server on :4000")
     err := http.ListenAndServe(":4000", mux)
     log.Fatal(err)
