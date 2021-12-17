@@ -48,5 +48,14 @@ func (app *application) createCoffee(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte("Create a new coffee"))
+	name := "black coffee"
+	ingredients := "water coffee"
+
+	id, err := app.coffees.Insert(name, ingredients)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	http.Redirect(w, r, fmt.Sprintf("/coffee?id=%d", id), http.StatusSeeOther)
 }
