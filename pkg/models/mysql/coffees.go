@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"database/sql"
+	"errors"
 	"katarzynakawala/github.com/coffee-shop/pkg/models"
 )
 
@@ -28,8 +29,24 @@ func (m *CoffeeModel) Insert(name, ingredients string) (int, error) {
 }
 
 func (m *CoffeeModel) Get(id int) (*models.Coffee, error) {
-	return nil, nil
+	stmt := `SELECT id, name, ingredients, created FROM coffees
+	WHERE id = ?`
+
+	row := m.DB.QueryRow(stmt, id)
+	s := &models.Coffee{}
+
+	err := row.Scan(&s.ID, &s.Name, &s.Ingredients, &s.Created)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, models.ErrNoRecord
+		} else {
+			return nil, err
+		}
+	}
+	return s, nil
 }
+
+
 func (m *CoffeeModel) Latest() ([]*models.Coffee, error) {
 	return nil, nil
 }

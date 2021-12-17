@@ -1,7 +1,9 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"katarzynakawala/github.com/coffee-shop/pkg/models"
 	"net/http"
 	"strconv"
 	"text/template"
@@ -38,7 +40,17 @@ func (app *application) displayCoffee(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "Display a specific coffee with ID %d", id)
+	s, err := app.coffees.Get(id)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			app.notFound(w)
+		} else {
+			app.serverError(w, err)
+		}
+		return
+	}
+
+	fmt.Fprintf(w, "%v", s)
 }
 
 func (app *application) createCoffee(w http.ResponseWriter, r *http.Request) {
