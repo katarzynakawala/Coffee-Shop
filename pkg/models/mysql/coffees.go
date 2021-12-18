@@ -48,5 +48,29 @@ func (m *CoffeeModel) Get(id int) (*models.Coffee, error) {
 
 
 func (m *CoffeeModel) Latest() ([]*models.Coffee, error) {
-	return nil, nil
+	stmt := `SELECT id, name, ingredients, created FROM coffees
+	ORDER BY created DESC LIMIT 10`
+
+	rows, err := m.DB.Query(stmt)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	coffees := []*models.Coffee{}
+
+	for rows.Next() {
+		s := &models.Coffee{}
+		err = rows.Scan(&s.ID, &s.Name, &s.Ingredients, &s.Created)
+		if err != nil {
+			return nil, err
+		}
+		coffees = append(coffees, s)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return coffees, nil
 }
