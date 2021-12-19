@@ -3,6 +3,23 @@
 {{define "title"}}Home{{end}}
 
 {{define "main"}}
-<h2>Newest Coffee</h2>
-<p>There's nothing to see here yet!</p>
-{{end}}     
+    <h2>Newest Coffees</h2>
+    {{if .Coffees}}
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Created</th>
+            <th>ID</th>
+        </tr>
+        {{range .Coffees}}
+        <tr>
+            <td><a href='/coffee?id={{.ID}}'>{{.Name}}</a></td>
+            <td>{{.Created}}</td>
+            <td>#{{.ID}}</td>
+        </tr>
+        {{end}}
+    </table>
+    {{else}}            
+        <p>There's nothing to see here yet!</p>
+    {{end}}
+{{end}}         

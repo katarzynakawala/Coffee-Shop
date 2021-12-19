@@ -15,32 +15,30 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s, err := app.coffees.Latest()
+	c, err := app.coffees.Latest()
 	if err != nil {
 		app.serverError(w, err)
 		return
 	}
 
-	for _, coffee := range s {
-		fmt.Fprintf(w, "%v\n", coffee)
+	data := &templateData{Coffees: c}
+
+	files := []string{
+		"./ui/html/home.page.tmpl",
+		"./ui/html/base.layout.tmpl",
+		"./ui/html/footer.partial.tmpl",
 	}
 
-	//files := []string{
-	//	"./ui/html/home.page.tmpl",
-	//	"./ui/html/base.layout.tmpl",
-	//	"./ui/html/footer.partial.tmpl",
-	//}
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
 
-	//ts, err := template.ParseFiles(files...)
-	//if err != nil {
-	//	app.serverError(w, err)
-	//	return
-	//}
-
-	//err = ts.Execute(w, nil)
-	//if err != nil {
-	//	app.serverError(w, err)
-	//}
+	err = ts.Execute(w, data)
+	if err != nil {
+		app.serverError(w, err)
+	}
 }
 
 func (app *application) displayCoffee(w http.ResponseWriter, r *http.Request) {
