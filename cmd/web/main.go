@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"text/template"
 
 	"katarzynakawala/github.com/coffee-shop/pkg/models/mysql"
 
@@ -13,9 +14,10 @@ import (
 )
 
 type application struct {
-	errorLog *log.Logger
-	infoLog  *log.Logger
-	coffees  *mysql.CoffeeModel
+	errorLog      *log.Logger
+	infoLog       *log.Logger
+	coffees       *mysql.CoffeeModel
+	templateCache map[string]*template.Template
 }
 
 func main() {
@@ -33,10 +35,16 @@ func main() {
 
 	defer db.Close()
 
+	templateCache, err := newTemplateCache("./ui/html/")
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
 	app := &application{
-		errorLog: errorLog,
-		infoLog:  infoLog,
-        coffees: &mysql.CoffeeModel{DB: db},
+		errorLog:      errorLog,
+		infoLog:       infoLog,
+		coffees:       &mysql.CoffeeModel{DB: db},
+		templateCache: templateCache,
 	}
 
 	srv := &http.Server{
