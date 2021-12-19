@@ -42,7 +42,7 @@ func (app *application) displayCoffee(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-app.render(w, r, "show.page.tmpl", &templateData{
+app.render(w, r, "display.page.tmpl", &templateData{
 	Coffee: c,
 	})	
 }
