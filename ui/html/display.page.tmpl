@@ -1,0 +1,15 @@
+{{template "base" .}}
+
+{{define "title"}} Coffee #{{.Coffee.ID}}{{end}}
+
+{{define "main"}}
+<div class='coffee'>
+    <div class='metadata'>
+        <strong>{{.Coffee.Name}}</strong>
+        <span>#{{.Coffee.ID}}</span>
+    </div>
+    <pre><code>{{.Coffee.Ingredients}}</code></pre>
+    <div class='metadata'>
+        <time>Created: {{.Coffee.Created}}</time>
+    </div>        
+{{end}}

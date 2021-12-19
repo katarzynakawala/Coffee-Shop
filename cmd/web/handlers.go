@@ -6,7 +6,7 @@ import (
 	"katarzynakawala/github.com/coffee-shop/pkg/models"
 	"net/http"
 	"strconv"
-	//"text/template"
+	"text/template"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +50,7 @@ func (app *application) displayCoffee(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	s, err := app.coffees.Get(id)
+	c, err := app.coffees.Get(id)
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
 			app.notFound(w)
@@ -60,7 +60,24 @@ func (app *application) displayCoffee(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "%v", s)
+	data := &templateData{Coffee: c}
+
+	files := []string{
+		"./ui/html/display.page.tmpl",
+		"./ui/html/base.layout.tmpl",
+		"./ui/html/footer.partial.tmpl",
+	}
+	
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	err = ts.Execute(w, data)
+	if err != nil {
+		app.serverError(w, err)
+	}
 }
 
 func (app *application) createCoffee(w http.ResponseWriter, r *http.Request) {
