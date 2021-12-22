@@ -7,8 +7,9 @@ import (
 )
 
 type templateData struct {
-	Coffee  *models.Coffee
-	Coffees []*models.Coffee
+	CurrentYear int
+	Coffee      *models.Coffee
+	Coffees     []*models.Coffee
 }
 
 func newTemplateCache(dir string) (map[string]*template.Template, error) {
@@ -26,7 +27,7 @@ func newTemplateCache(dir string) (map[string]*template.Template, error) {
 		if err != nil {
 			return nil, err
 		}
-		
+
 		ts, err = ts.ParseGlob(filepath.Join(dir, "*.layout.tmpl"))
 		if err != nil {
 			return nil, err
