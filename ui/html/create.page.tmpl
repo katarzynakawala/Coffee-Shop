@@ -1,0 +1,19 @@
+{{template "base" .}}
+
+{{define "title"}}Create a New Coffee{{end}}
+
+{{define "main"}}
+<form action='/coffee/create' method='POST'>
+    <div>
+        <label>Name:</label>
+        <input type='text' name='name'>
+    </div>
+    <div>
+        <label>Content:</label>
+        <textarea name='ingredients'></textarea>
+    </div>
+    <div>
+        <input type='submit' value='Publish coffee'>
+    </div>
+</form>
+{{end}}        

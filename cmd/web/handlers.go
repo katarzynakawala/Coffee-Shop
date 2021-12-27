@@ -43,8 +43,8 @@ app.render(w, r, "display.page.tmpl", &templateData{
 	})	
 }
 
-func (app *application) createCofffeeForm(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Create a new coffee"))
+func (app *application) createCoffeeForm(w http.ResponseWriter, r *http.Request) {
+	app.render(w, r, "create.page.tmpl", nil)
 }
 
 func (app *application) createCoffee(w http.ResponseWriter, r *http.Request) {

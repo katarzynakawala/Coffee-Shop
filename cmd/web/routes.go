@@ -12,6 +12,7 @@ func (app *application) routes() http.Handler {
 
 	mux := pat.New()
 	mux.Get("/", http.HandlerFunc(app.home))
+	mux.Get("/coffee/create", http.HandlerFunc(app.createCoffeeForm))
 	mux.Post("/coffee/create", http.HandlerFunc(app.createCoffee))
 	mux.Get("/coffee/:id", http.HandlerFunc(app.displayCoffee))
 
