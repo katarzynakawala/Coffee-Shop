@@ -13,7 +13,7 @@
         </tr>
         {{range .Coffees}}
         <tr>
-            <td><a href='/coffee?id={{.ID}}'>{{.Name}}</a></td>
+            <td><a href='/coffee/{{.ID}}'>{{.Name}}</a></td>
             <td>{{humanDate .Created}}</td>
             <td>#{{.ID}}</td>
         </tr>
