@@ -22,6 +22,7 @@ type application struct {
 	session       *sessions.Session
 	coffees       *mysql.CoffeeModel
 	templateCache map[string]*template.Template
+	users         *mysql.UserModel
 }
 
 func main() {
@@ -54,9 +55,11 @@ func main() {
 		session:       session,
 		coffees:       &mysql.CoffeeModel{DB: db},
 		templateCache: templateCache,
+		users:         &mysql.UserModel{DB: db},
 	}
 
 	tlsConfig := &tls.Config{
+		PreferServerCipherSuites: true,
 		CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
 	}
 
