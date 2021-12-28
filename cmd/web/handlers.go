@@ -3,11 +3,10 @@ package main
 import (
 	"errors"
 	"fmt"
+	"katarzynakawala/github.com/coffee-shop/pkg/forms"
 	"katarzynakawala/github.com/coffee-shop/pkg/models"
 	"net/http"
 	"strconv"
-	"strings"
-	"unicode/utf8"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +45,9 @@ func (app *application) displayCoffee(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) createCoffeeForm(w http.ResponseWriter, r *http.Request) {
-	app.render(w, r, "create.page.tmpl", nil)
+	app.render(w, r, "create.page.tmpl", &templateData{
+		Form: forms.New(nil),
+	})
 }
 
 func (app *application) createCoffee(w http.ResponseWriter, r *http.Request) {
@@ -57,30 +58,16 @@ func (app *application) createCoffee(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	name := r.PostForm.Get("name")
-	ingredients := r.PostForm.Get("ingredients")
+	form := forms.New(r.PostForm)
+	form.Required("name", "ingredients")
+	form.MaxLength("name", 100)
 
-	errors := make(map[string]string)
-
-	if strings.TrimSpace(name) == "" {
-		errors["name"] = "This field cannot be blank"
-	} else if utf8.RuneCountInString(name) > 100 {
-		errors["name"] = "This field is too long - max is 100 characters"
-	}
-
-	if strings.TrimSpace(ingredients) == "" {
-		errors["ingredients"] = "This field cannot be blank"
-	}
-
-	if len(errors) > 0 {
-		app.render(w, r, "create.page.tmpl", &templateData{
-			FormErrors: errors,
-			FormData:   r.PostForm,
-		})
+	if !form.Valid() {
+		app.render(w, r, "create.page.tmpl", &templateData{Form: form})
 		return
 	}
 
-	id, err := app.coffees.Insert(name, ingredients)
+	id, err := app.coffees.Insert(form.Get("name"), form.Get("ingredients"))
 	if err != nil {
 		app.serverError(w, err)
 		return

@@ -1,8 +1,8 @@
 package main
 
 import (
+	"katarzynakawala/github.com/coffee-shop/pkg/forms"
 	"katarzynakawala/github.com/coffee-shop/pkg/models"
-	"net/url"
 	"path/filepath"
 	"text/template"
 	"time"
@@ -10,8 +10,7 @@ import (
 
 type templateData struct {
 	CurrentYear int
-	FormData    url.Values
-	FormErrors  map[string]string
+	Form		*forms.Form
 	Coffee      *models.Coffee
 	Coffees     []*models.Coffee
 }

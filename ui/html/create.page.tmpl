@@ -4,22 +4,24 @@
 
 {{define "main"}}
 <form action='/coffee/create' method='POST'>
-    <div>
-        <label>Name:</label>
-        {{with .FormErrors.name}}
-            <label class='error'>{{.}}</label>
-        {{end}}    
-        <input type='text' name='name' value='{{.FormData.Get "name"}}'>
-    </div>
-    <div>
-        <label>Ingredients:</label>
-        {{with .FormErrors.ingredients}}
-            <label class='error'>{{.}}</label>
-        {{end}}    
-        <textarea name='ingredients'>{{.FormData.Get "ingredients"}}</textarea>
-    </div>
-    <div>
-        <input type='submit' value='Publish coffee'>
-    </div>
+    {{with .Form}}
+        <div>
+            <label>Name:</label>
+            {{with .Errors.Get "name"}}
+                <label class='error'>{{.}}</label>
+            {{end}}    
+            <input type='text' name='name' value='{{.Get "name"}}'>
+        </div>
+        <div>
+            <label>Ingredients:</label>
+            {{with .Errors.Get "ingredients"}}
+                <label class='error'>{{.}}</label>
+            {{end}}    
+            <textarea name='ingredients'>{{.Get "ingredients"}}</textarea>
+        </div>
+        <div>
+            <input type='submit' value='Publish coffee'>
+        </div>
+    {{end}}    
 </form>
 {{end}}        
