@@ -73,5 +73,7 @@ func (app *application) createCoffee(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	app.session.Put(r, "flash", "Coffee successfully created!")
+
 	http.Redirect(w, r, fmt.Sprintf("/coffee/%d", id), http.StatusSeeOther)
 }
