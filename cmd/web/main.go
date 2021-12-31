@@ -10,6 +10,7 @@ import (
 	"text/template"
 	"time"
 
+	"katarzynakawala/github.com/coffee-shop/pkg/models"
 	"katarzynakawala/github.com/coffee-shop/pkg/models/mysql"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -24,9 +25,17 @@ type application struct {
 	errorLog      *log.Logger
 	infoLog       *log.Logger
 	session       *sessions.Session
-	coffees       *mysql.CoffeeModel
+	coffees interface {
+		Insert(string, string) (int, error)
+		Get(int) (*models.Coffee, error)
+		Latest() ([]*models.Coffee, error)
+	}
 	templateCache map[string]*template.Template
-	users         *mysql.UserModel
+	users         interface {
+		Insert(string, string, string) error
+		Authenticate(string, string) (int, error)
+		Get(int) (*models.User, error)
+	}
 }
 
 func main() {
