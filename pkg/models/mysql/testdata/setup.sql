@@ -2,7 +2,7 @@ CREATE TABLE coffees (
     id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
     ingredients TEXT NOT NULL,
-    created DATETIME NOT NULL,
+    created DATETIME NOT NULL
 );
 
 CREATE INDEX idx_coffees_created ON coffees(created);
