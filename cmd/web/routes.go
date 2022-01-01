@@ -15,6 +15,7 @@ func (app *application) routes() http.Handler {
 
 	mux := pat.New()
 	mux.Get("/", dynamicMiddleware.ThenFunc(app.home))
+	mux.Get("/about", dynamicMiddleware.ThenFunc(app.about))
 	mux.Get("/coffee/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createCoffeeForm))
 	mux.Post("/coffee/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createCoffee))
 	mux.Get("/coffee/:id", dynamicMiddleware.ThenFunc(app.displayCoffee))
