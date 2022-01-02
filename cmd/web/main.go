@@ -22,10 +22,11 @@ type contextKey string
 const contextKeyIsAuthenticated = contextKey("isAuthenticated")
 
 type application struct {
-	errorLog      *log.Logger
-	infoLog       *log.Logger
-	session       *sessions.Session
-	coffees interface {
+	debug    bool
+	errorLog *log.Logger
+	infoLog  *log.Logger
+	session  *sessions.Session
+	coffees  interface {
 		Insert(string, string) (int, error)
 		Get(int) (*models.Coffee, error)
 		Latest() ([]*models.Coffee, error)
@@ -41,6 +42,7 @@ type application struct {
 
 func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
+	debug := flag.Bool("debug", false, "Enable debug mode")
 	dsn := flag.String("dsn", "usr:password@/coffeeshop?parseTime=true", "MySQL data source name")
 	secret := flag.String("secret", "c6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@df", "Secret key")
 	flag.Parse()
@@ -64,6 +66,7 @@ func main() {
 	session.Secure = true
 
 	app := &application{
+		debug:         *debug,
 		errorLog:      errorLog,
 		infoLog:       infoLog,
 		session:       session,
@@ -74,7 +77,7 @@ func main() {
 
 	tlsConfig := &tls.Config{
 		PreferServerCipherSuites: true,
-		CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
+		CurvePreferences:         []tls.CurveID{tls.X25519, tls.CurveP256},
 	}
 
 	srv := &http.Server{
